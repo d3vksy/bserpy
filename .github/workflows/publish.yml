@@ -1,0 +1,75 @@
+name: Publish
+
+# v* 태그 push 시 자동 실행 (예: git tag v0.1.0 && git push --tags)
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write   # GitHub Release 생성
+  id-token: write   # PyPI Trusted Publishing (OIDC, API 키 불필요)
+
+jobs:
+  # ── 1. 빌드 ───────────────────────────────────────────────
+  build:
+    name: Build distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build tool
+        run: pip install build
+
+      - name: Build wheel & sdist
+        run: python -m build
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  # ── 2. PyPI 배포 ───────────────────────────────────────────
+  publish-pypi:
+    name: Publish to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/bserpy/
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      # Trusted Publishing — PyPI 프로젝트 설정에서 GitHub Actions 허용 필요
+      # https://docs.pypi.org/trusted-publishers/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+
+  # ── 3. GitHub Release 자동 생성 ───────────────────────────
+  github-release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Create release with notes
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            dist/* \
+            --title "${{ github.ref_name }}" \
+            --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
