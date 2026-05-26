@@ -1,16 +1,22 @@
 <div align="center">
   <h1>Bserpy</h1>
   <img src="./logo_black.png"></img>
-  <p><strong>이터널리턴 Open API v11 Python 래퍼 라이브러리</strong></p>
+  <p><strong>이터널리턴 Open API Python 래퍼 라이브러리</strong></p>
 </div>
+
+[<img src="https://img.shields.io/pypi/v/bserpy.svg">](https://pypi.python.org/pypi/bserpy)
+[<img src="https://img.shields.io/pypi/pyversions/bserpy.svg">](https://pypi.python.org/pypi/bserpy)
+[<img src="https://img.shields.io/github/actions/workflow/status/d3vksy/bserpy/ci.yml?branch=main">](https://github.com/d3vksy/bserpy/actions)
+[<img src="https://img.shields.io/badge/License-MIT-yellow.svg">](https://github.com/d3vksy/bserpy/blob/main/LICENSE)<br>
 
 ```python
 from bserpy import Client
 
 with Client(api_key="...") as client:
-    user  = client.users.get_uid("oracle1")
-    rank  = client.users.get_rank(user.user_id, season_id=39)
-    print(f"{rank.rank}위  MMR {rank.mmr}")
+user = client.users.get_uid("oracle1")
+rank = client.users.get_rank(user.user_id, season_id=39)
+print(f"{rank.rank}위 MMR {rank.mmr}")
+
 ```
 
 ## 설치
@@ -225,7 +231,3 @@ with Client(api_key="...") as client:
 | `RateLimitError`      | 403(레이트리밋) 또는 429 — `retry_after` 속성 포함 |
 | `NotFoundError`       | 404                                                |
 | `ServerError`         | 5xx — `status_code` 속성 포함                      |
-
-## 라이선스
-
-MIT
