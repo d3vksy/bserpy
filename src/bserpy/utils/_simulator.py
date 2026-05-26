@@ -96,7 +96,8 @@ class SimulatedStats:
 
     # ── 공격 ────────────────────────────────────────────────
     attack_power: float = 0.0
-    attack_speed: float = 0.0  # 캐릭터 기본 공속 (비율 미포함)
+    attack_speed: float = 0.0  # 캐릭터 기본 공속
+    weapon_type_attack_speed: float = 0.0  # 무기 타입 기본 공속 (WeaponTypeInfo)
     attack_speed_ratio: float = 0.0  # 공속 증가율 합계
     attack_speed_limit: float = 0.0  # 공속 상한
     increase_basic_attack_damage: float = 0.0  # 평타 피해 고정 증가
@@ -166,8 +167,13 @@ class SimulatedStats:
 
     @property
     def effective_attack_speed(self) -> float:
-        """공속 상한 적용 후 최종 공격 속도."""
-        raw = self.attack_speed * (1.0 + self.attack_speed_ratio)
+        """공속 상한 적용 후 최종 공격 속도.
+
+        공식: (캐릭터 기본 공속 + 무기 타입 기본 공속) × (1 + Σ 공속 증가율)
+        무기 미장착 시 weapon_type_attack_speed=0, 숙련도 미적용.
+        """
+        base = self.attack_speed + self.weapon_type_attack_speed
+        raw = base * (1.0 + self.attack_speed_ratio)
         return min(raw, self.attack_speed_limit) if self.attack_speed_limit > 0 else raw
 
 
@@ -194,6 +200,7 @@ class CharacterSimulator:
     def __init__(self, client: Client, character_code: int, level: int = 1) -> None:
         if not 1 <= level <= 20:
             raise ValueError(f"level은 1–20 사이여야 합니다. 입력값: {level}")
+        self._client = client
         self._char_helper = CharacterHelper(client)
         self._item_helper = ItemHelper(client)
         self._character_code = character_code
@@ -201,6 +208,7 @@ class CharacterSimulator:
         self._weapon: dict[str, Any] | None = None
         self._armors: dict[str, dict[str, Any]] = {}  # armorType → item dict
         self._mastery_types: list[tuple[str, int]] = []  # (type, mastery_level)
+        self._weapon_type_info: dict[str, float] | None = None  # weaponType → attackSpeed
 
     # ── 아이템 장착 ──────────────────────────────────────────
 
@@ -259,6 +267,12 @@ class CharacterSimulator:
         self._armors.clear()
         return self
 
+    def _load_weapon_type_info(self) -> dict[str, float]:
+        if self._weapon_type_info is None:
+            rows = self._client.meta.get_data("WeaponTypeInfo")
+            self._weapon_type_info = {r["type"]: float(r.get("attackSpeed", 0)) for r in rows}
+        return self._weapon_type_info
+
     # ── 스탯 계산 ────────────────────────────────────────────
 
     def get_stats(self) -> SimulatedStats:
@@ -291,15 +305,22 @@ class CharacterSimulator:
             equipped_armors=list(self._armors.values()),
         )
 
+        # 무기 타입 기본 공속 (WeaponTypeInfo)
+        if self._weapon:
+            weapon_type = self._weapon.get("weaponType", "")
+            result.weapon_type_attack_speed = self._load_weapon_type_info().get(weapon_type, 0.0)
+
         for item in self._all_items():
             self._apply_item(result, item)
 
-        for m_type, m_level in self._mastery_types:
-            bonus = self._char_helper.mastery_stat(self._character_code, m_type)
-            if bonus is None:
-                bonus = self._char_helper.mastery_stat(0, m_type)
-            if bonus:
-                self._apply_mastery(result, bonus, m_level)
+        # 숙련도는 무기 장착 시에만 적용
+        if self._weapon:
+            for m_type, m_level in self._mastery_types:
+                bonus = self._char_helper.mastery_stat(self._character_code, m_type)
+                if bonus is None:
+                    bonus = self._char_helper.mastery_stat(0, m_type)
+                if bonus:
+                    self._apply_mastery(result, bonus, m_level)
 
         return result
 
