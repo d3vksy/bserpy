@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:
     from bserpy._client import Client
 
-from bserpy.utils._character import CharacterHelper
+from bserpy.utils._character import CharacterHelper, MasteryStatBonus
 from bserpy.utils._item import ItemHelper
 
 # (item_camel, lv_scale_camel_or_None, SimulatedStats_snake)
@@ -68,6 +68,12 @@ _ITEM_STAT_MAP: list[tuple[str, str | None, str]] = [
     ("weaponCooldownReduction", None, "weapon_cooldown_reduction"),
     ("tacticalCooldownReduction", None, "tactical_cooldown_reduction"),
 ]
+
+# 숙련도 스탯 이름(PascalCase) → SimulatedStats 필드명(snake_case)
+# MasteryBonusStat.name 은 "AttackSpeedRatio" 같은 PascalCase
+_MASTERY_STAT_MAP: dict[str, str] = {
+    camel[0].upper() + camel[1:]: snake for camel, _, snake in _ITEM_STAT_MAP
+}
 
 
 @dataclass
@@ -194,6 +200,7 @@ class CharacterSimulator:
         self._level = level
         self._weapon: dict[str, Any] | None = None
         self._armors: dict[str, dict[str, Any]] = {}  # armorType → item dict
+        self._mastery_types: list[str] = []
 
     # ── 아이템 장착 ──────────────────────────────────────────
 
@@ -220,6 +227,15 @@ class CharacterSimulator:
             )
         slot = item.get("armorType", "Unknown")
         self._armors[slot] = item
+        return self
+
+    def set_mastery(self, *mastery_types: str) -> CharacterSimulator:
+        """숙련도 설정. 기존 숙련도를 교체합니다.
+
+        Args:
+            mastery_types: 무기·전투·생존 숙련도 타입 (예: ``"Dagger"``, ``"Combat1"``)
+        """
+        self._mastery_types = list(mastery_types)
         return self
 
     def remove_weapon(self) -> CharacterSimulator:
@@ -273,6 +289,13 @@ class CharacterSimulator:
         for item in self._all_items():
             self._apply_item(result, item)
 
+        for m_type in self._mastery_types:
+            bonus = self._char_helper.mastery_stat(self._character_code, m_type)
+            if bonus is None:
+                bonus = self._char_helper.mastery_stat(0, m_type)
+            if bonus:
+                self._apply_mastery(result, bonus)
+
         return result
 
     def _all_items(self) -> list[dict[str, Any]]:
@@ -281,6 +304,12 @@ class CharacterSimulator:
             items.append(self._weapon)
         items.extend(self._armors.values())
         return items
+
+    def _apply_mastery(self, stats: SimulatedStats, bonus: MasteryStatBonus) -> None:
+        for b in bonus.bonuses:
+            snake = _MASTERY_STAT_MAP.get(b.name)
+            if snake:
+                setattr(stats, snake, getattr(stats, snake, 0.0) + b.value)
 
     def _apply_item(self, stats: SimulatedStats, item: dict[str, Any]) -> None:
         for item_field, lv_field, stat_field in _ITEM_STAT_MAP:
