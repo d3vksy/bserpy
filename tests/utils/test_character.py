@@ -213,10 +213,11 @@ def test_mastery_stat(client: Client) -> None:
     bonus = h.mastery_stat(1, "OneHandSword")
 
     assert bonus is not None
-    assert bonus.first_option == "AttackSpeedRatio"
-    assert bonus.first_value() == pytest.approx(0.041)
-    assert bonus.second_option == "IncreaseBasicAttackDamageRatio"
-    assert bonus.second_value() == pytest.approx(0.03)
+    assert len(bonus.bonuses) == 2  # thirdOption이 "None"이라 제외
+    assert bonus.bonuses[0].name == "AttackSpeedRatio"
+    assert bonus.bonuses[0].value == pytest.approx(0.041)
+    assert bonus.bonuses[1].name == "IncreaseBasicAttackDamageRatio"
+    assert bonus.bonuses[1].value == pytest.approx(0.03)
 
 
 @respx.mock

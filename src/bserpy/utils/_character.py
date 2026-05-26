@@ -101,40 +101,23 @@ class CharacterInfo:
 
 
 @dataclass
-class MasteryStatBonus:
-    """무기 숙련도별 스탯 보너스.
+class MasteryBonusStat:
+    """숙련도 보너스 스탯 하나."""
 
-    ``section`` 은 숙련도 구간(1–4)에 따른 값이지만
-    캐릭터 대부분은 모든 구간 값이 동일합니다.
-    일반적으로 ``section=1`` 값을 사용하면 됩니다.
+    name: str
+    value: float
+
+
+@dataclass
+class MasteryStatBonus:
+    """숙련도별 스탯 보너스 (무기·전투·생존 공통).
+
+    ``bonuses`` 는 실제 보너스 스탯만 담습니다 (``"None"`` 항목 제외, 최대 3개).
     """
 
-    weapon_type: str
+    mastery_type: str
     character_code: int
-    first_option: str
-    first_option_s1: float
-    first_option_s2: float
-    first_option_s3: float
-    first_option_s4: float
-    second_option: str
-    second_option_s1: float
-    second_option_s2: float
-    second_option_s3: float
-    second_option_s4: float
-    third_option: str
-    third_option_s1: float
-    third_option_s2: float
-    third_option_s3: float
-    third_option_s4: float
-
-    def first_value(self, section: int = 1) -> float:
-        return getattr(self, f"first_option_s{section}")
-
-    def second_value(self, section: int = 1) -> float:
-        return getattr(self, f"second_option_s{section}")
-
-    def third_value(self, section: int = 1) -> float:
-        return getattr(self, f"third_option_s{section}")
+    bonuses: list[MasteryBonusStat]
 
 
 @dataclass
@@ -204,24 +187,20 @@ class CharacterHelper:
             self._mastery_stat = {}
             for r in rows:
                 key = (r["characterCode"], r["type"])
+                raw = [
+                    (r.get("firstOption", "None"), r.get("firstOptionSection1Value", 0)),
+                    (r.get("secondOption", "None"), r.get("secondOptionSection1Value", 0)),
+                    (r.get("thirdOption", "None"), r.get("thirdOptionSection1Value", 0)),
+                ]
+                bonuses = [
+                    MasteryBonusStat(name=name, value=float(val))
+                    for name, val in raw
+                    if name != "None"
+                ]
                 self._mastery_stat[key] = MasteryStatBonus(
-                    weapon_type=r["type"],
+                    mastery_type=r["type"],
                     character_code=r["characterCode"],
-                    first_option=r.get("firstOption", "None"),
-                    first_option_s1=float(r.get("firstOptionSection1Value", 0)),
-                    first_option_s2=float(r.get("firstOptionSection2Value", 0)),
-                    first_option_s3=float(r.get("firstOptionSection3Value", 0)),
-                    first_option_s4=float(r.get("firstOptionSection4Value", 0)),
-                    second_option=r.get("secondOption", "None"),
-                    second_option_s1=float(r.get("secondOptionSection1Value", 0)),
-                    second_option_s2=float(r.get("secondOptionSection2Value", 0)),
-                    second_option_s3=float(r.get("secondOptionSection3Value", 0)),
-                    second_option_s4=float(r.get("secondOptionSection4Value", 0)),
-                    third_option=r.get("thirdOption", "None"),
-                    third_option_s1=float(r.get("thirdOptionSection1Value", 0)),
-                    third_option_s2=float(r.get("thirdOptionSection2Value", 0)),
-                    third_option_s3=float(r.get("thirdOptionSection3Value", 0)),
-                    third_option_s4=float(r.get("thirdOptionSection4Value", 0)),
+                    bonuses=bonuses,
                 )
         return self._mastery_stat
 
@@ -313,21 +292,24 @@ class CharacterHelper:
         )
 
     def mastery_stat(
-        self, character_code: int, weapon_type: str
+        self, character_code: int, mastery_type: str
     ) -> MasteryStatBonus | None:
         """특정 무기 숙련도의 스탯 보너스.
 
+        무기 숙련도는 캐릭터별로 다르며 ``character_code`` 로 구분됩니다.
+        방어·사냥·제작 등 공통 숙련도는 ``character_code=0`` 으로 저장되어 있습니다.
+
         Args:
-            character_code: 캐릭터 코드
-            weapon_type: ``"OneHandSword"``, ``"Axe"``, ``"Bow"`` 등
+            character_code: 캐릭터 코드 (공통 숙련도는 0)
+            mastery_type: ``"OneHandSword"``, ``"Axe"`` 등
 
         Returns:
             ``MasteryStatBonus`` 또는 해당 조합이 없으면 ``None``
         """
-        return self._load_mastery_stat().get((character_code, weapon_type))
+        return self._load_mastery_stat().get((character_code, mastery_type))
 
     def all_mastery_stats(self, character_code: int) -> list[MasteryStatBonus]:
-        """캐릭터의 모든 무기 숙련도 스탯 보너스 목록."""
+        """캐릭터의 모든 숙련도 스탯 보너스 목록 (무기·전투·생존 포함)."""
         return [v for (code, _), v in self._load_mastery_stat().items() if code == character_code]
 
     def all_character_codes(self) -> list[int]:

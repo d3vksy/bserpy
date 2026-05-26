@@ -3,6 +3,7 @@ from bserpy.utils._character import (
     CharacterInfo,
     CharacterMasteryOptions,
     CharacterStats,
+    MasteryBonusStat,
     MasteryStatBonus,
 )
 from bserpy.utils._item import ItemHelper
@@ -16,6 +17,7 @@ __all__ = [
     "CharacterStats",
     "CharacterSimulator",
     "ItemHelper",
+    "MasteryBonusStat",
     "MasteryStatBonus",
     "SeasonHelper",
     "SimulatedStats",
