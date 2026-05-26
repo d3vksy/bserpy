@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from bserpy._client import Client
@@ -22,11 +22,11 @@ class ItemHelper:
 
     def __init__(self, client: Client) -> None:
         self._client = client
-        self._weapons: list[dict] | None = None
-        self._armors: list[dict] | None = None
-        self._consumables: list[dict] | None = None
-        self._specials: list[dict] | None = None
-        self._index: dict[int, dict] | None = None
+        self._weapons: list[dict[str, Any]] | None = None
+        self._armors: list[dict[str, Any]] | None = None
+        self._consumables: list[dict[str, Any]] | None = None
+        self._specials: list[dict[str, Any]] | None = None
+        self._index: dict[int, dict[str, Any]] | None = None
 
     def _load_weapons(self) -> None:
         if self._weapons is None:
@@ -56,9 +56,10 @@ class ItemHelper:
                 for item in table:
                     self._index[item["code"]] = item
 
-    def get(self, code: int) -> dict | None:
+    def get(self, code: int) -> dict[str, Any] | None:
         """Find any item by code across all item types. Returns None if not found."""
         self._load_all()
+        assert self._index is not None
         return self._index.get(code)
 
     def get_weapons(
@@ -67,7 +68,7 @@ class ItemHelper:
         weapon_type: str | None = None,
         grade: str | None = None,
         completed_only: bool = False,
-    ) -> list[dict]:
+    ) -> list[dict[str, Any]]:
         """Filter weapon items.
 
         Args:
@@ -77,7 +78,7 @@ class ItemHelper:
         """
         self._load_weapons()
         assert self._weapons is not None
-        result: list[dict] = self._weapons
+        result: list[dict[str, Any]] = self._weapons
         if weapon_type:
             result = [i for i in result if i.get("weaponType") == weapon_type]
         if grade:
@@ -92,7 +93,7 @@ class ItemHelper:
         armor_type: str | None = None,
         grade: str | None = None,
         completed_only: bool = False,
-    ) -> list[dict]:
+    ) -> list[dict[str, Any]]:
         """Filter armor items.
 
         Args:
@@ -102,7 +103,7 @@ class ItemHelper:
         """
         self._load_armors()
         assert self._armors is not None
-        result: list[dict] = self._armors
+        result: list[dict[str, Any]] = self._armors
         if armor_type:
             result = [i for i in result if i.get("armorType") == armor_type]
         if grade:
@@ -111,7 +112,7 @@ class ItemHelper:
             result = [i for i in result if i.get("isCompletedItem")]
         return result
 
-    def get_consumables(self, *, consumable_type: str | None = None) -> list[dict]:
+    def get_consumables(self, *, consumable_type: str | None = None) -> list[dict[str, Any]]:
         """Filter consumable items.
 
         Args:
@@ -123,13 +124,13 @@ class ItemHelper:
             return [i for i in self._consumables if i.get("consumableType") == consumable_type]
         return list(self._consumables)
 
-    def get_specials(self) -> list[dict]:
+    def get_specials(self) -> list[dict[str, Any]]:
         """Return all special items."""
         self._load_specials()
         assert self._specials is not None
         return list(self._specials)
 
-    def craftable_from(self, material_code: int) -> list[dict]:
+    def craftable_from(self, material_code: int) -> list[dict[str, Any]]:
         """Return all items craftable using ``material_code`` as either material."""
         self._load_all()
         assert self._index is not None

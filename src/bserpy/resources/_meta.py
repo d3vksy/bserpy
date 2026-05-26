@@ -17,17 +17,20 @@ class MetaResource:
     def get_hash(self) -> dict[str, int]:
         """사용 가능한 메타 테이블 이름과 해시 코드 딕셔너리."""
         data = self._t.get("/v2/data/hash")
-        return data["data"]
+        result: dict[str, int] = data["data"]
+        return result
 
     def get_data(self, meta_type: str) -> list[dict[str, Any]]:
         """특정 게임 데이터 테이블 조회. meta_type 예: 'Character', 'Monster'."""
         data = self._t.get(f"/v2/data/{meta_type}")
-        return data["data"]
+        result: list[dict[str, Any]] = data["data"]
+        return result
 
     def get_l10n(self, language: str = "Korean") -> str:
         """현지화 데이터 다운로드 URL 반환."""
         data = self._t.get(f"/v1/l10n/{language}")
-        return data["data"]["l10Path"]
+        result: str = data["data"]["l10Path"]
+        return result
 
     def get_l10n_parsed(self, language: str = "Korean") -> L10nData:
         """현지화 데이터를 자동 파싱해서 L10nData로 반환.

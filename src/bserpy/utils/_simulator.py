@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from bserpy._client import Client
@@ -12,53 +12,61 @@ from bserpy.utils._item import ItemHelper
 # (item_camel, lv_scale_camel_or_None, SimulatedStats_snake)
 # ByLv 필드: item_stat + lv_stat * level 로 계산
 _ITEM_STAT_MAP: list[tuple[str, str | None, str]] = [
-    ("attackPower",                       "attackPowerByLv",                       "attack_power"),
-    ("defense",                           "defenseByLv",                           "defense"),
-    ("skillAmp",                          "skillAmpByLevel",                       "skill_amp"),
-    ("skillAmpRatio",                     "skillAmpRatioByLevel",                  "skill_amp_ratio"),
-    ("adaptiveForce",                     "adaptiveForceByLevel",                  "adaptive_force"),
-    ("maxHp",                             "maxHpByLv",                             "max_hp"),
-    ("hpRegen",                           None,                                    "hp_regen"),
-    ("hpRegenRatio",                      None,                                    "hp_regen_ratio"),
-    ("attackSpeedRatio",                  "attackSpeedRatioByLv",                  "attack_speed_ratio"),
-    ("criticalStrikeChance",              None,                                    "critical_strike_chance"),
-    ("criticalStrikeDamage",              None,                                    "critical_strike_damage"),
-    ("preventCriticalStrikeDamaged",      None,                                    "prevent_critical_strike_damaged"),
-    ("cooldownReduction",                 None,                                    "cooldown_reduction"),
-    ("cooldownLimit",                     None,                                    "cooldown_limit"),
-    ("lifeSteal",                         None,                                    "life_steal"),
-    ("normalLifeSteal",                   None,                                    "normal_life_steal"),
-    ("skillLifeSteal",                    None,                                    "skill_life_steal"),
-    ("moveSpeed",                         None,                                    "move_speed"),
-    ("moveSpeedRatio",                    None,                                    "move_speed_ratio"),
-    ("moveSpeedOutOfCombat",              None,                                    "move_speed_out_of_combat"),
-    ("sightRange",                        None,                                    "sight_range"),
-    ("attackRange",                       None,                                    "attack_range"),
-    ("increaseBasicAttackDamage",         "increaseBasicAttackDamageByLv",         "increase_basic_attack_damage"),
-    ("increaseBasicAttackDamageRatio",    "increaseBasicAttackDamageRatioByLv",    "increase_basic_attack_damage_ratio"),
-    ("preventBasicAttackDamaged",         "preventBasicAttackDamagedByLv",         "prevent_basic_attack_damaged"),
-    ("preventBasicAttackDamagedRatio",    "preventBasicAttackDamagedRatioByLv",    "prevent_basic_attack_damaged_ratio"),
-    ("preventSkillDamaged",               "preventSkillDamagedByLv",               "prevent_skill_damaged"),
-    ("preventSkillDamagedRatio",          "preventSkillDamagedRatioByLv",          "prevent_skill_damaged_ratio"),
-    ("penetrationDefense",                None,                                    "penetration_defense"),
-    ("penetrationDefenseRatio",           None,                                    "penetration_defense_ratio"),
-    ("trapDamageReduce",                  None,                                    "trap_damage_reduce"),
-    ("trapDamageReduceRatio",             None,                                    "trap_damage_reduce_ratio"),
-    ("slowResistRatio",                   None,                                    "slow_resist_ratio"),
-    ("hpHealedIncreaseRatio",             None,                                    "hp_healed_increase_ratio"),
-    ("healerGiveHpHealRatio",             None,                                    "healer_give_hp_heal_ratio"),
-    ("uniqueAttackRange",                 None,                                    "unique_attack_range"),
-    ("uniqueHpHealedIncreaseRatio",       None,                                    "unique_hp_healed_increase_ratio"),
-    ("uniqueCooldownLimit",               None,                                    "unique_cooldown_limit"),
-    ("uniqueTenacity",                    None,                                    "unique_tenacity"),
-    ("uniqueMoveSpeed",                   None,                                    "unique_move_speed"),
-    ("uniquePenetrationDefense",          None,                                    "unique_penetration_defense"),
-    ("uniquePenetrationDefenseRatio",     None,                                    "unique_penetration_defense_ratio"),
-    ("uniqueLifeSteal",                   None,                                    "unique_life_steal"),
-    ("uniqueSkillAmpRatio",               None,                                    "unique_skill_amp_ratio"),
-    ("ultCooldownReduction",              None,                                    "ult_cooldown_reduction"),
-    ("weaponCooldownReduction",           None,                                    "weapon_cooldown_reduction"),
-    ("tacticalCooldownReduction",         None,                                    "tactical_cooldown_reduction"),
+    ("attackPower", "attackPowerByLv", "attack_power"),
+    ("defense", "defenseByLv", "defense"),
+    ("skillAmp", "skillAmpByLevel", "skill_amp"),
+    ("skillAmpRatio", "skillAmpRatioByLevel", "skill_amp_ratio"),
+    ("adaptiveForce", "adaptiveForceByLevel", "adaptive_force"),
+    ("maxHp", "maxHpByLv", "max_hp"),
+    ("hpRegen", None, "hp_regen"),
+    ("hpRegenRatio", None, "hp_regen_ratio"),
+    ("attackSpeedRatio", "attackSpeedRatioByLv", "attack_speed_ratio"),
+    ("criticalStrikeChance", None, "critical_strike_chance"),
+    ("criticalStrikeDamage", None, "critical_strike_damage"),
+    ("preventCriticalStrikeDamaged", None, "prevent_critical_strike_damaged"),
+    ("cooldownReduction", None, "cooldown_reduction"),
+    ("cooldownLimit", None, "cooldown_limit"),
+    ("lifeSteal", None, "life_steal"),
+    ("normalLifeSteal", None, "normal_life_steal"),
+    ("skillLifeSteal", None, "skill_life_steal"),
+    ("moveSpeed", None, "move_speed"),
+    ("moveSpeedRatio", None, "move_speed_ratio"),
+    ("moveSpeedOutOfCombat", None, "move_speed_out_of_combat"),
+    ("sightRange", None, "sight_range"),
+    ("attackRange", None, "attack_range"),
+    ("increaseBasicAttackDamage", "increaseBasicAttackDamageByLv", "increase_basic_attack_damage"),
+    (
+        "increaseBasicAttackDamageRatio",
+        "increaseBasicAttackDamageRatioByLv",
+        "increase_basic_attack_damage_ratio",
+    ),
+    ("preventBasicAttackDamaged", "preventBasicAttackDamagedByLv", "prevent_basic_attack_damaged"),
+    (
+        "preventBasicAttackDamagedRatio",
+        "preventBasicAttackDamagedRatioByLv",
+        "prevent_basic_attack_damaged_ratio",
+    ),
+    ("preventSkillDamaged", "preventSkillDamagedByLv", "prevent_skill_damaged"),
+    ("preventSkillDamagedRatio", "preventSkillDamagedRatioByLv", "prevent_skill_damaged_ratio"),
+    ("penetrationDefense", None, "penetration_defense"),
+    ("penetrationDefenseRatio", None, "penetration_defense_ratio"),
+    ("trapDamageReduce", None, "trap_damage_reduce"),
+    ("trapDamageReduceRatio", None, "trap_damage_reduce_ratio"),
+    ("slowResistRatio", None, "slow_resist_ratio"),
+    ("hpHealedIncreaseRatio", None, "hp_healed_increase_ratio"),
+    ("healerGiveHpHealRatio", None, "healer_give_hp_heal_ratio"),
+    ("uniqueAttackRange", None, "unique_attack_range"),
+    ("uniqueHpHealedIncreaseRatio", None, "unique_hp_healed_increase_ratio"),
+    ("uniqueCooldownLimit", None, "unique_cooldown_limit"),
+    ("uniqueTenacity", None, "unique_tenacity"),
+    ("uniqueMoveSpeed", None, "unique_move_speed"),
+    ("uniquePenetrationDefense", None, "unique_penetration_defense"),
+    ("uniquePenetrationDefenseRatio", None, "unique_penetration_defense_ratio"),
+    ("uniqueLifeSteal", None, "unique_life_steal"),
+    ("uniqueSkillAmpRatio", None, "unique_skill_amp_ratio"),
+    ("ultCooldownReduction", None, "ult_cooldown_reduction"),
+    ("weaponCooldownReduction", None, "weapon_cooldown_reduction"),
+    ("tacticalCooldownReduction", None, "tactical_cooldown_reduction"),
 ]
 
 
@@ -147,8 +155,8 @@ class SimulatedStats:
     unique_skill_amp_ratio: float = 0.0
 
     # ── 장착 아이템 정보 (repr 제외) ──────────────────────
-    equipped_weapon: dict | None = field(default=None, repr=False)
-    equipped_armors: list[dict] = field(default_factory=list, repr=False)
+    equipped_weapon: dict[str, Any] | None = field(default=None, repr=False)
+    equipped_armors: list[dict[str, Any]] = field(default_factory=list, repr=False)
 
     @property
     def effective_attack_speed(self) -> float:
@@ -184,8 +192,8 @@ class CharacterSimulator:
         self._item_helper = ItemHelper(client)
         self._character_code = character_code
         self._level = level
-        self._weapon: dict | None = None
-        self._armors: dict[str, dict] = {}  # armorType → item dict
+        self._weapon: dict[str, Any] | None = None
+        self._armors: dict[str, dict[str, Any]] = {}  # armorType → item dict
 
     # ── 아이템 장착 ──────────────────────────────────────────
 
@@ -267,14 +275,14 @@ class CharacterSimulator:
 
         return result
 
-    def _all_items(self) -> list[dict]:
-        items: list[dict] = []
+    def _all_items(self) -> list[dict[str, Any]]:
+        items: list[dict[str, Any]] = []
         if self._weapon:
             items.append(self._weapon)
         items.extend(self._armors.values())
         return items
 
-    def _apply_item(self, stats: SimulatedStats, item: dict) -> None:
+    def _apply_item(self, stats: SimulatedStats, item: dict[str, Any]) -> None:
         for item_field, lv_field, stat_field in _ITEM_STAT_MAP:
             val = float(item.get(item_field, 0))
             if lv_field:
@@ -284,7 +292,7 @@ class CharacterSimulator:
 
     # ── 편의 메서드 ──────────────────────────────────────────
 
-    def equipped(self) -> dict[str, dict | None]:
+    def equipped(self) -> dict[str, dict[str, Any] | None]:
         """현재 장착 중인 아이템 목록."""
         return {
             "weapon": self._weapon,

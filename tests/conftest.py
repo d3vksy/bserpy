@@ -5,7 +5,6 @@ from pathlib import Path
 
 import pytest
 import respx
-import httpx
 
 FIXTURES = Path(__file__).parent / "fixtures"
 

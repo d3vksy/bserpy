@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
 
@@ -135,7 +135,9 @@ class WeaponRouteBundle:
     def from_dict(cls, data: dict[str, Any]) -> WeaponRouteBundle:
         # 실제 키: recommendWeaponRoute (문서 오기: recommendedWeaponRoute)
         route_data = data.get("recommendWeaponRoute") or data.get("recommendedWeaponRoute", {})
-        desc_data = data.get("recommendWeaponRouteDesc") or data.get("recommendedWeaponRouteDesc", {})
+        desc_data = data.get("recommendWeaponRouteDesc") or data.get(
+            "recommendedWeaponRouteDesc", {}
+        )
         return cls(
             route=RecommendWeaponRoute.from_dict(route_data),
             desc=RecommendWeaponRouteDesc.from_dict(desc_data),

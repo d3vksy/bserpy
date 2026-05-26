@@ -24,7 +24,9 @@ class AuthenticationError(BserError):
 class RateLimitError(BserError):
     """403(레이트 리미트) 또는 429 — 요청 초과."""
 
-    def __init__(self, message: str, status_code: int = 429, retry_after: float | None = None) -> None:
+    def __init__(
+        self, message: str, status_code: int = 429, retry_after: float | None = None
+    ) -> None:
         super().__init__(message)
         self.status_code = status_code
         self.retry_after = retry_after

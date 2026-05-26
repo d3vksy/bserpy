@@ -16,15 +16,18 @@ class AsyncMetaResource:
 
     async def get_hash(self) -> dict[str, int]:
         data = await self._t.get("/v2/data/hash")
-        return data["data"]
+        result: dict[str, int] = data["data"]
+        return result
 
     async def get_data(self, meta_type: str) -> list[dict[str, Any]]:
         data = await self._t.get(f"/v2/data/{meta_type}")
-        return data["data"]
+        result: list[dict[str, Any]] = data["data"]
+        return result
 
     async def get_l10n(self, language: str = "Korean") -> str:
         data = await self._t.get(f"/v1/l10n/{language}")
-        return data["data"]["l10Path"]
+        result: str = data["data"]["l10Path"]
+        return result
 
     async def get_l10n_parsed(self, language: str = "Korean") -> L10nData:
         if language not in self._l10n_cache:

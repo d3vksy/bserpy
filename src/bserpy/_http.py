@@ -194,6 +194,6 @@ def _backoff(attempt: int, retry_after: float | None) -> float:
     """서버 Retry-After 우선, 없으면 exponential backoff + jitter."""
     if retry_after is not None:
         return retry_after
-    base = 2**attempt
-    jitter = random.uniform(0, base * 0.1)
+    base: float = float(2**attempt)
+    jitter: float = random.uniform(0.0, base * 0.1)
     return base + jitter

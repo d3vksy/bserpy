@@ -290,7 +290,6 @@ class BattleUserResult:  # noqa: PLR0902
     tactical_skill_group: int = 0
     tactical_skill_level: int = 0
     tactical_skill_use_count: int = 0
-    tactical_skill_upgrade_use_vf_credit: int = 0  # (중복 경로 방지용 alias)
 
     # ── 부활/이탈 ────────────────────────────────────────
     credit_revival_count: int = 0
@@ -588,9 +587,18 @@ class BattleUserResult:  # noqa: PLR0902
             item_shredder_gain_vf_credit=d.get("itemShredderGainVFCredit", 0),
             remote_drone_use_vf_credit_my_self=d.get("remoteDroneUseVFCreditMySelf", 0),
             remote_drone_use_vf_credit_ally=d.get("remoteDroneUseVFCreditAlly", 0),
-            kiosk_from_material_use_vf_credit=d.get("kioskFromMaterialUseVFCredit", d.get("transferConsoleFromMaterialUseVFCredit", 0)),
-            kiosk_from_escape_key_use_vf_credit=d.get("kioskFromEscapeKeyUseVFCredit", d.get("transferConsoleFromEscapeKeyUseVFCredit", 0)),
-            kiosk_from_revival_use_vf_credit=d.get("kioskFromRevivalUseVFCredit", d.get("transferConsoleFromRevivalUseVFCredit", 0)),
+            kiosk_from_material_use_vf_credit=d.get(
+                "kioskFromMaterialUseVFCredit",
+                d.get("transferConsoleFromMaterialUseVFCredit", 0),
+            ),
+            kiosk_from_escape_key_use_vf_credit=d.get(
+                "kioskFromEscapeKeyUseVFCredit",
+                d.get("transferConsoleFromEscapeKeyUseVFCredit", 0),
+            ),
+            kiosk_from_revival_use_vf_credit=d.get(
+                "kioskFromRevivalUseVFCredit",
+                d.get("transferConsoleFromRevivalUseVFCredit", 0),
+            ),
             tactical_skill_upgrade_use_vf_credit=d.get("tacticalSkillUpgradeUseVFCredit", 0),
             cr_get_animal=d.get("crGetAnimal", 0),
             cr_get_mutant=d.get("crGetMutant", 0),
@@ -633,7 +641,10 @@ class BattleUserResult:  # noqa: PLR0902
             credit_revival_count=d.get("creditRevivalCount", 0),
             credit_revived_others_count=d.get("creditRevivedOthersCount", 0),
             time_spent_in_briefing_room=d.get("timeSpentInBriefingRoom", 0),
-            is_leaving_before_credit_revival_terminate=d.get("IsLeavingBeforeCreditRevivalTerminate") or d.get("isLeavingBeforeCreditRevivalTerminate"),
+            is_leaving_before_credit_revival_terminate=(
+                d.get("IsLeavingBeforeCreditRevivalTerminate")
+                or d.get("isLeavingBeforeCreditRevivalTerminate")
+            ),
             innocente_give_up=d.get("innocentGiveUp") or d.get("isInnocentGiveUp"),
             view_contribution=d.get("viewContribution", 0),
             use_recon_drone=d.get("useReconDrone", 0),
@@ -687,7 +698,9 @@ class BattleUserResult:  # noqa: PLR0902
             used_normal_heal_pack=d.get("usedNormalHealPack", 0),
             used_reinforced_heal_pack=d.get("usedReinforcedHealPack", 0),
             used_normal_shield_pack=d.get("usedNormalShieldPack", d.get("usedNormalShiedPack", 0)),
-            used_reinforce_shield_pack=d.get("usedReinforceShieldPack", d.get("usedReinforcedShieldPack", 0)),
+            used_reinforce_shield_pack=d.get(
+                "usedReinforceShieldPack", d.get("usedReinforcedShieldPack", 0)
+            ),
             bought_infusion=d.get("boughtInfusion", {}),
             final_infusion=d.get("finalInfusion", []),
             scored_point=d.get("scoredPoint", []),

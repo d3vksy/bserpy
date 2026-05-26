@@ -94,7 +94,7 @@ class CharacterInfo:
 
     code: int
     name: str
-    char_arche_type1: str = ""    # 주 타입: "Warrior", "Assassin", "Hunter", "Scientist", "Tanker", "Support"
+    char_arche_type1: str = ""  # 주 타입 (Warrior/Assassin/Hunter/Scientist/Tanker/Support)
     char_arche_type2: str = ""    # 부 타입 (없으면 "None")
     weapon_range_type: str = ""   # "Melee" / "Ranged"
     start_skills: list[str] = field(default_factory=list)  # 시작 시 배운 스킬
