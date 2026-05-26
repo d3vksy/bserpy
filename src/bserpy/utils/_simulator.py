@@ -200,7 +200,7 @@ class CharacterSimulator:
         self._level = level
         self._weapon: dict[str, Any] | None = None
         self._armors: dict[str, dict[str, Any]] = {}  # armorType → item dict
-        self._mastery_types: list[str] = []
+        self._mastery_types: list[tuple[str, int]] = []  # (type, mastery_level)
 
     # ── 아이템 장착 ──────────────────────────────────────────
 
@@ -229,13 +229,18 @@ class CharacterSimulator:
         self._armors[slot] = item
         return self
 
-    def set_mastery(self, *mastery_types: str) -> CharacterSimulator:
-        """숙련도 설정. 기존 숙련도를 교체합니다.
+    def set_mastery(self, *mastery_types: str, mastery_level: int = 1) -> CharacterSimulator:
+        """숙련도 및 레벨 설정. 기존 숙련도를 교체합니다.
+
+        보너스 = API 기본값 × mastery_level (Lv20 단검 공속 = 0.041 × 20 = 82%)
 
         Args:
-            mastery_types: 무기·전투·생존 숙련도 타입 (예: ``"Dagger"``, ``"Combat1"``)
+            mastery_types: 숙련도 타입 (예: ``"OneHandSword"``, ``"Defense"``)
+            mastery_level: 숙련도 레벨 (1–20, 기본 1)
         """
-        self._mastery_types = list(mastery_types)
+        if not 1 <= mastery_level <= 20:
+            raise ValueError(f"mastery_level은 1–20 사이여야 합니다. 입력값: {mastery_level}")
+        self._mastery_types = [(m, mastery_level) for m in mastery_types]
         return self
 
     def remove_weapon(self) -> CharacterSimulator:
@@ -289,12 +294,12 @@ class CharacterSimulator:
         for item in self._all_items():
             self._apply_item(result, item)
 
-        for m_type in self._mastery_types:
+        for m_type, m_level in self._mastery_types:
             bonus = self._char_helper.mastery_stat(self._character_code, m_type)
             if bonus is None:
                 bonus = self._char_helper.mastery_stat(0, m_type)
             if bonus:
-                self._apply_mastery(result, bonus)
+                self._apply_mastery(result, bonus, m_level)
 
         return result
 
@@ -305,11 +310,11 @@ class CharacterSimulator:
         items.extend(self._armors.values())
         return items
 
-    def _apply_mastery(self, stats: SimulatedStats, bonus: MasteryStatBonus) -> None:
+    def _apply_mastery(self, stats: SimulatedStats, bonus: MasteryStatBonus, level: int) -> None:
         for b in bonus.bonuses:
             snake = _MASTERY_STAT_MAP.get(b.name)
             if snake:
-                setattr(stats, snake, getattr(stats, snake, 0.0) + b.value)
+                setattr(stats, snake, getattr(stats, snake, 0.0) + b.value * level)
 
     def _apply_item(self, stats: SimulatedStats, item: dict[str, Any]) -> None:
         for item_field, lv_field, stat_field in _ITEM_STAT_MAP:

@@ -277,7 +277,9 @@ class CharacterHelper:
     def mastery_options(self, character_code: int) -> CharacterMasteryOptions:
         """캐릭터가 선택 가능한 무기·전투·생존 숙련도 목록."""
         mastery_table = self._load_mastery_opts()
-        row = mastery_table[character_code]
+        row = mastery_table.get(character_code)
+        if row is None:
+            return CharacterMasteryOptions(code=character_code)
         weapons = [row[k] for k in ("weapon1", "weapon2", "weapon3", "weapon4") if row.get(k)]
         combats = [row[k] for k in ("combat1", "combat2") if row.get(k)]
         survivals = [row[k] for k in ("survival1", "survival2", "survival3") if row.get(k)]
