@@ -90,27 +90,27 @@ class SimulatedStats:
 
     # ── 공격 ────────────────────────────────────────────────
     attack_power: float = 0.0
-    attack_speed: float = 0.0                           # 캐릭터 기본 공속 (비율 미포함)
-    attack_speed_ratio: float = 0.0                     # 공속 증가율 합계
-    attack_speed_limit: float = 0.0                     # 공속 상한
-    increase_basic_attack_damage: float = 0.0           # 평타 피해 고정 증가
-    increase_basic_attack_damage_ratio: float = 0.0     # 평타 피해 증폭 (%)
+    attack_speed: float = 0.0  # 캐릭터 기본 공속 (비율 미포함)
+    attack_speed_ratio: float = 0.0  # 공속 증가율 합계
+    attack_speed_limit: float = 0.0  # 공속 상한
+    increase_basic_attack_damage: float = 0.0  # 평타 피해 고정 증가
+    increase_basic_attack_damage_ratio: float = 0.0  # 평타 피해 증폭 (%)
     attack_range: float = 0.0
 
     # ── 방어 ────────────────────────────────────────────────
     defense: float = 0.0
-    prevent_basic_attack_damaged: float = 0.0           # 평타 피해 감소 (고정)
-    prevent_basic_attack_damaged_ratio: float = 0.0     # 평타 피해 감소 (%)
-    prevent_skill_damaged: float = 0.0                  # 스킬 피해 감소 (고정)
-    prevent_skill_damaged_ratio: float = 0.0            # 스킬 피해 감소 (%)
-    prevent_critical_strike_damaged: float = 0.0        # 치명타 피해 감소
+    prevent_basic_attack_damaged: float = 0.0  # 평타 피해 감소 (고정)
+    prevent_basic_attack_damaged_ratio: float = 0.0  # 평타 피해 감소 (%)
+    prevent_skill_damaged: float = 0.0  # 스킬 피해 감소 (고정)
+    prevent_skill_damaged_ratio: float = 0.0  # 스킬 피해 감소 (%)
+    prevent_critical_strike_damaged: float = 0.0  # 치명타 피해 감소
     trap_damage_reduce: float = 0.0
     trap_damage_reduce_ratio: float = 0.0
 
     # ── 스킬 ────────────────────────────────────────────────
-    skill_amp: float = 0.0                              # 스킬 증폭 (고정)
-    skill_amp_ratio: float = 0.0                        # 스킬 증폭 (%)
-    adaptive_force: float = 0.0                         # 적응형 능력치
+    skill_amp: float = 0.0  # 스킬 증폭 (고정)
+    skill_amp_ratio: float = 0.0  # 스킬 증폭 (%)
+    adaptive_force: float = 0.0  # 적응형 능력치
 
     # ── 치명타 ──────────────────────────────────────────────
     critical_strike_chance: float = 0.0

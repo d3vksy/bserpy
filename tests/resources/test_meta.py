@@ -8,28 +8,47 @@ from bserpy import Client
 from bserpy.models import L10nData, WeaponRouteBundle
 
 ROUTE_FIXTURE = {
-    "code": 200, "message": "Success",
-    "result": [{
-        "recommendWeaponRoute": {
-            "id": 16998, "title": "테스트", "userNum": 5968045, "userNickname": "테스터",
-            "characterCode": 79, "slotId": 0, "weaponType": 8,
-            "weaponCodes": "[115403,202307]", "traitCodes": "[7300201,7310401]",
-            "lateGameItemCodes": "{\"0\":[115504,202511]}", "remoteTransferItemCodes": "[]",
-            "tacticalSkillGroupCode": 30, "paths": "[90,10]",
-            "count": 0, "version": "11.1.0", "teamMode": 0, "languageCode": "ko",
-            "routeVersion": 5, "share": True, "updateDtm": 1778343557000,
-            "v2Like": 0, "v2WinRate": 0.0, "v2SeasonId": 0,
-            "v2AccumulateLike": 0, "v2AccumulateWinRate": 0.0, "v2AccumulateSeasonId": 0
-        },
-        "recommendWeaponRouteDesc": {
-            "recommendWeaponRouteId": 16998, "skillPath": "e,q,w,q"
+    "code": 200,
+    "message": "Success",
+    "result": [
+        {
+            "recommendWeaponRoute": {
+                "id": 16998,
+                "title": "테스트",
+                "userNum": 5968045,
+                "userNickname": "테스터",
+                "characterCode": 79,
+                "slotId": 0,
+                "weaponType": 8,
+                "weaponCodes": "[115403,202307]",
+                "traitCodes": "[7300201,7310401]",
+                "lateGameItemCodes": '{"0":[115504,202511]}',
+                "remoteTransferItemCodes": "[]",
+                "tacticalSkillGroupCode": 30,
+                "paths": "[90,10]",
+                "count": 0,
+                "version": "11.1.0",
+                "teamMode": 0,
+                "languageCode": "ko",
+                "routeVersion": 5,
+                "share": True,
+                "updateDtm": 1778343557000,
+                "v2Like": 0,
+                "v2WinRate": 0.0,
+                "v2SeasonId": 0,
+                "v2AccumulateLike": 0,
+                "v2AccumulateWinRate": 0.0,
+                "v2AccumulateSeasonId": 0,
+            },
+            "recommendWeaponRouteDesc": {"recommendWeaponRouteId": 16998, "skillPath": "e,q,w,q"},
         }
-    }]
+    ],
 }
 
 L10N_FIXTURE = {
-    "code": 200, "message": "Success",
-    "data": {"l10Path": "https://example.com/l10n.txt"}
+    "code": 200,
+    "message": "Success",
+    "data": {"l10Path": "https://example.com/l10n.txt"},
 }
 
 L10N_CONTENT = "Character/Name/1┃재키\nCharacter/Name/2┃아야\nArea/Name/Harbor┃항구\n"

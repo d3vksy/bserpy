@@ -56,10 +56,10 @@ class CharacterStat:
     max_killings: int
     top3: int
     wins: int
-    most_used_skin_code: int | None = None    # 문서 미기재, 실제 존재
+    most_used_skin_code: int | None = None  # 문서 미기재, 실제 존재
     latest_used_skin_code: int | None = None  # 문서 미기재, 실제 존재
-    top3_rate: float | None = None            # 문서 미기재, 실제 존재
-    average_rank: float | None = None         # 문서 미기재, 실제 존재
+    top3_rate: float | None = None  # 문서 미기재, 실제 존재
+    average_rank: float | None = None  # 문서 미기재, 실제 존재
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> CharacterStat:

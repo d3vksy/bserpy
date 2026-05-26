@@ -43,6 +43,7 @@ def test_get_match(client):
 @respx.mock
 def test_get_match_500(client):
     from bserpy import ServerError
+
     respx.get("https://open-api.bser.io/v1/games/99999").mock(
         return_value=httpx.Response(500, json={"code": 500, "message": "Internal Server Error"})
     )

@@ -40,9 +40,9 @@ class UnionTeam:
     ss_tier_tickets: int
     sss_tier_tickets: int
     season_highest_tier: int
-    win_count_by_tier: dict[str, int]    # {"SSS": 2, "SS": 5, ...}
-    created_at: int                       # epoch time
-    updated_at: int                       # epoch time
+    win_count_by_tier: dict[str, int]  # {"SSS": 2, "SS": 5, ...}
+    created_at: int  # epoch time
+    updated_at: int  # epoch time
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> UnionTeam:

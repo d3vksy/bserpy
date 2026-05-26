@@ -77,11 +77,11 @@ class CharacterStats:
     # ── 방어 ────────────────────────────────────────────────
     defense: float = 0.0
     prevent_basic_attack_damaged_ratio: float = 0.0  # 평타 피해 감소
-    prevent_skill_damaged_ratio: float = 0.0          # 스킬 피해 감소
+    prevent_skill_damaged_ratio: float = 0.0  # 스킬 피해 감소
     # ── 스킬 ────────────────────────────────────────────────
     skill_amp: float = 0.0
-    skill_amp_ratio: float = 0.0                      # 스킬 증폭
-    adaptive_force: float = 0.0                       # 적응형 능력치
+    skill_amp_ratio: float = 0.0  # 스킬 증폭
+    adaptive_force: float = 0.0  # 적응형 능력치
     # ── 기타 ────────────────────────────────────────────────
     critical_strike_chance: float = 0.0
     move_speed: float = 0.0
@@ -95,8 +95,8 @@ class CharacterInfo:
     code: int
     name: str
     char_arche_type1: str = ""  # 주 타입 (Warrior/Assassin/Hunter/Scientist/Tanker/Support)
-    char_arche_type2: str = ""    # 부 타입 (없으면 "None")
-    weapon_range_type: str = ""   # "Melee" / "Ranged"
+    char_arche_type2: str = ""  # 부 타입 (없으면 "None")
+    weapon_range_type: str = ""  # "Melee" / "Ranged"
     start_skills: list[str] = field(default_factory=list)  # 시작 시 배운 스킬
 
 
@@ -244,14 +244,13 @@ class CharacterHelper:
         growth_table = self._load_levelup()
         base_row = base_table[character_code]
         growth_row = growth_table[character_code]
-        stats = CharacterStats(
-            code=character_code, name=base_row.get("name", ""), level=level
-        )
+        stats = CharacterStats(code=character_code, name=base_row.get("name", ""), level=level)
         # 공통 필드: base + growth * (level - 1)
         for camel, snake in _LEVELUP_FIELDS.items():
-            b = float(base_row.get(camel) or base_row.get(
-                "criticalStrikeChance" if camel == "criticalChance" else camel, 0
-            ))
+            b = float(
+                base_row.get(camel)
+                or base_row.get("criticalStrikeChance" if camel == "criticalChance" else camel, 0)
+            )
             g = float(growth_row.get(camel, 0))
             setattr(stats, snake, b + g * (level - 1))
         # 레벨 무관 필드 (base 전용)
@@ -264,9 +263,7 @@ class CharacterHelper:
         base = self._load_base()
         row = base[character_code]
         start_skills = [
-            s.strip()
-            for s in row.get("strLearnStartSkill", "").split(",")
-            if s.strip()
+            s.strip() for s in row.get("strLearnStartSkill", "").split(",") if s.strip()
         ]
         return CharacterInfo(
             code=character_code,
@@ -291,9 +288,7 @@ class CharacterHelper:
             survival_types=survivals,
         )
 
-    def mastery_stat(
-        self, character_code: int, mastery_type: str
-    ) -> MasteryStatBonus | None:
+    def mastery_stat(self, character_code: int, mastery_type: str) -> MasteryStatBonus | None:
         """특정 무기 숙련도의 스탯 보너스.
 
         무기 숙련도는 캐릭터별로 다르며 ``character_code`` 로 구분됩니다.

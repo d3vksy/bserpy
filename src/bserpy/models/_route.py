@@ -50,17 +50,17 @@ class RecommendWeaponRoute:
 
     id: int
     title: str
-    user_num: int          # 레거시 userNum 그대로 노출 (문서의 userId와 다름)
+    user_num: int  # 레거시 userNum 그대로 노출 (문서의 userId와 다름)
     user_nickname: str
     character_code: int
     slot_id: int
     weapon_type: int
-    weapon_codes: list[int]          # JSON 문자열 → 자동 파싱
-    trait_codes: list[int]           # JSON 문자열 → 자동 파싱
+    weapon_codes: list[int]  # JSON 문자열 → 자동 파싱
+    trait_codes: list[int]  # JSON 문자열 → 자동 파싱
     late_game_item_codes: dict[str, list[int]]  # JSON 문자열 → 자동 파싱
     remote_transfer_item_codes: list[int]
     tactical_skill_group_code: int
-    paths: list[int]                 # JSON 문자열 → 자동 파싱
+    paths: list[int]  # JSON 문자열 → 자동 파싱
     count: int
     version: str
     team_mode: int

@@ -37,7 +37,7 @@ class BattleUserResult:  # noqa: PLR0902
     best_weapon_level: int
     mastery_level: dict[str, int]
     equipment: dict[str, int]
-    equipment_grade: dict[str, int]          # 문서 미기재, 실제 존재
+    equipment_grade: dict[str, int]  # 문서 미기재, 실제 존재
 
     # ── 버전 ─────────────────────────────────────────────
     version_season: int | None
@@ -56,15 +56,15 @@ class BattleUserResult:  # noqa: PLR0902
     play_time: int
     watch_time: int
     total_time: int
-    expire_dtm: str | None = None            # 문서 미기재, 실제 존재
-    survivable_time: int | None = None       # 문서 미기재, 실제 존재
+    expire_dtm: str | None = None  # 문서 미기재, 실제 존재
+    survivable_time: int | None = None  # 문서 미기재, 실제 존재
 
     # ── MMR ──────────────────────────────────────────────
     mmr_before: int | None = None
     mmr_gain: int | None = None
     mmr_after: int | None = None
     mmr_avg: int | None = None
-    rank_point: int | None = None            # 문서 미기재, 실제 존재 (mmrAfter 와 동일값)
+    rank_point: int | None = None  # 문서 미기재, 실제 존재 (mmrAfter 와 동일값)
     mmr_gain_in_game: int | None = None
     mmr_loss_entry_cost: int | None = None
 
@@ -95,9 +95,9 @@ class BattleUserResult:  # noqa: PLR0902
 
     # ── 경험치/크레딧 ────────────────────────────────────
     gain_exp: int = 0
-    base_exp: int | None = None              # 문서 미기재
-    bonus_exp: int | None = None             # 문서 미기재
-    bonus_coin: int | None = None            # 문서 미기재
+    base_exp: int | None = None  # 문서 미기재
+    bonus_exp: int | None = None  # 문서 미기재
+    bonus_coin: int | None = None  # 문서 미기재
 
     # ── 피해량 (대 플레이어) ─────────────────────────────
     damage_to_player: int = 0
@@ -155,9 +155,9 @@ class BattleUserResult:  # noqa: PLR0902
     safe_areas: int = 0
     team_number: int = 0
     pre_made: int = 0
-    match_size: int | None = None            # 문서 미기재, 실제 존재
+    match_size: int | None = None  # 문서 미기재, 실제 존재
     team_kill: int = 0
-    total_field_kill: int | None = None      # 문서 미기재, 실제 존재
+    total_field_kill: int | None = None  # 문서 미기재, 실제 존재
     premade_matching_type: int | None = None
 
     # ── 경로/위치 ────────────────────────────────────────
@@ -213,10 +213,10 @@ class BattleUserResult:  # noqa: PLR0902
     trait_second_sub: list[int] = field(default_factory=list)
 
     # ── VF 크레딧 ────────────────────────────────────────
-    total_vf_credits: list[int] = field(default_factory=list)   # 실제: totalVFCredits (배열)
-    used_vf_credits: list[int] = field(default_factory=list)    # 실제: usedVFCredits (배열)
-    actively_gained_credits: int | None = None                   # 문서 미기재
-    sum_used_vf_credits: int | None = None                       # 문서 미기재
+    total_vf_credits: list[int] = field(default_factory=list)  # 실제: totalVFCredits (배열)
+    used_vf_credits: list[int] = field(default_factory=list)  # 실제: usedVFCredits (배열)
+    actively_gained_credits: int | None = None  # 문서 미기재
+    sum_used_vf_credits: int | None = None  # 문서 미기재
     total_gain_vf_credit: int = 0
     total_use_vf_credit: int = 0
 
@@ -240,9 +240,9 @@ class BattleUserResult:  # noqa: PLR0902
     # ── VF 크레딧 사용처 ─────────────────────────────────
     remote_drone_use_vf_credit_my_self: int = 0
     remote_drone_use_vf_credit_ally: int = 0
-    kiosk_from_material_use_vf_credit: int = 0      # 실제: kioskFromMaterialUseVFCredit
-    kiosk_from_escape_key_use_vf_credit: int = 0    # 실제: kioskFromEscapeKeyUseVFCredit
-    kiosk_from_revival_use_vf_credit: int = 0       # 실제: kioskFromRevivalUseVFCredit
+    kiosk_from_material_use_vf_credit: int = 0  # 실제: kioskFromMaterialUseVFCredit
+    kiosk_from_escape_key_use_vf_credit: int = 0  # 실제: kioskFromEscapeKeyUseVFCredit
+    kiosk_from_revival_use_vf_credit: int = 0  # 실제: kioskFromRevivalUseVFCredit
     tactical_skill_upgrade_use_vf_credit: int = 0
 
     # ── cr 크레딧 계열 ───────────────────────────────────
@@ -256,11 +256,11 @@ class BattleUserResult:  # noqa: PLR0902
     cr_use_remote_drone: int = 0
     cr_use_upgrade_tactical_skill: int = 0
     cr_use_tree_of_life: int = 0
-    cr_use_meteorite: int | None = None              # 문서 미기재, 실제 존재
+    cr_use_meteorite: int | None = None  # 문서 미기재, 실제 존재
     cr_use_mythril: int = 0
     cr_use_force_core: int = 0
     cr_use_vf_blood_sample: int = 0
-    cr_use_activation_module: int | None = None      # 문서 미기재
+    cr_use_activation_module: int | None = None  # 문서 미기재
     cr_use_rootkit: int = 0
     kiosk_exchange_credit: int = 0
 
@@ -269,13 +269,13 @@ class BattleUserResult:  # noqa: PLR0902
     team_down: int = 0
     team_battle_zone_down: int = 0
     team_repeat_down: int = 0
-    team_down_can_not_eliminate: int | None = None   # 문서 미기재
-    team_down_can_eliminate: int | None = None       # 문서 미기재
+    team_down_can_not_eliminate: int | None = None  # 문서 미기재
+    team_down_can_eliminate: int | None = None  # 문서 미기재
     team_repeat_down_can_not_eliminate: int | None = None
     team_repeat_down_can_eliminate: int | None = None
     terminate_count: int = 0
     terminate_count_can_not_eliminate: int | None = None
-    break_count: int | None = None                   # 문서 미기재
+    break_count: int | None = None  # 문서 미기재
     clutch_count: int = 0
     unknown_kill: int = 0
 
@@ -364,8 +364,8 @@ class BattleUserResult:  # noqa: PLR0902
     starting_items: list[int] = field(default_factory=list)
     used_normal_heal_pack: int = 0
     used_reinforced_heal_pack: int = 0
-    used_normal_shield_pack: int = 0      # 문서 오타: usedNormalShiedPack
-    used_reinforce_shield_pack: int = 0   # 문서: usedReinforcedShieldPack
+    used_normal_shield_pack: int = 0  # 문서 오타: usedNormalShiedPack
+    used_reinforce_shield_pack: int = 0  # 문서: usedReinforcedShieldPack
     bought_infusion: dict[str, Any] = field(default_factory=dict)
     final_infusion: list[int] = field(default_factory=list)
     scored_point: list[int] = field(default_factory=list)
